@@ -33,7 +33,7 @@ npm install
 ## Como rodar
 
 ```bash
-node index.js
+node --watch --experimental-sqlite app.js
 ```
 
 O servidor sobe em `http://localhost:3000`.
