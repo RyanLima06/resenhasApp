@@ -1,0 +1,29 @@
+# Dependências
+node_modules/
+
+# Banco de dados
+usuarios.db
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+# Variáveis de ambiente
+.env
+.env.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# Editor / SO
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Build (caso adicione no futuro)
+dist/
+build/

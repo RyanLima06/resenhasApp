@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caderno de Resenhas</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root{
+    --paper: #efe9dc;
+    --paper-dark: #e4dcc8;
+    --ink: #262019;
+    --ink-soft: #5c5346;
+    --rule: #c9bfa6;
+    --red: #8c2f28;
+    --red-soft: #b8483c;
+    --gold: #a9822f;
+  }
+
+  *{ box-sizing: border-box; }
+
+  body{
+    margin:0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Source Serif 4', serif;
+    line-height: 1.5;
+  }
+
+  .wrap{
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 56px 28px 100px;
+  }
+
+  header{
+    border-bottom: 3px double var(--ink);
+    padding-bottom: 18px;
+    margin-bottom: 36px;
+  }
+
+  header .kicker{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: .04em;
+    color: var(--ink-soft);
+    margin: 0 0 6px;
+  }
+
+  h1{
+    font-size: 42px;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+
+  h1 em{
+    font-style: italic;
+    color: var(--red);
+  }
+
+  .sub{
+    color: var(--ink-soft);
+    font-size: 15px;
+    margin-top: 8px;
+    max-width: 46ch;
+  }
+
+  /* form card */
+  .entry{
+    background: var(--paper-dark);
+    border: 1px solid var(--rule);
+    padding: 24px;
+    margin-bottom: 48px;
+  }
+
+  .entry h2{
+    font-size: 15px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 500;
+    margin: 0 0 18px;
+    color: var(--ink-soft);
+  }
+
+  .field{
+    margin-bottom: 16px;
+  }
+
+  .field label{
+    display:block;
+    font-size: 13px;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+
+  .field input, .field textarea{
+    width: 100%;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    padding: 10px 12px;
+    font-family: 'Source Serif 4', serif;
+    font-size: 16px;
+    color: var(--ink);
+  }
+
+  .field textarea{
+    min-height: 70px;
+    resize: vertical;
+  }
+
+  .field input:focus, .field textarea:focus{
+    outline: 2px solid var(--red-soft);
+    outline-offset: 1px;
+  }
+
+  .row{
+    display:flex;
+    gap: 14px;
+    align-items:flex-end;
+  }
+
+  .row .field{ flex:1; }
+  .row .field.note{ flex: 0 0 110px; }
+
+  button{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: .02em;
+    border: none;
+    cursor: pointer;
+    padding: 11px 20px;
+    background: var(--ink);
+    color: var(--paper);
+    transition: background .15s ease;
+  }
+  button:hover{ background: var(--red); }
+
+  button.ghost{
+    background: transparent;
+    color: var(--ink-soft);
+    border: 1px solid var(--rule);
+  }
+  button.ghost:hover{
+    background: var(--paper);
+    color: var(--red);
+    border-color: var(--red-soft);
+  }
+
+  .actions-row{
+    display:flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 4px;
+  }
+
+  .status{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    margin-top: 12px;
+    min-height: 16px;
+  }
+  .status.ok{ color: #3f6b3f; }
+  .status.err{ color: var(--red); }
+
+  /* list */
+  .list-head{
+    display:flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 10px;
+    margin-bottom: 4px;
+  }
+
+  .list-head h2{
+    font-size: 15px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 500;
+    color: var(--ink-soft);
+    margin:0;
+  }
+
+  #count{ font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--ink-soft); }
+
+  .card{
+    border-bottom: 1px solid var(--rule);
+    padding: 22px 0;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 14px;
+    align-items: start;
+  }
+
+  .card .meta{
+    display:flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+
+  .card .name{
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .card .note{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 1px 7px;
+    white-space: nowrap;
+  }
+
+  .card .describe{
+    color: var(--ink-soft);
+    font-size: 15px;
+    font-style: italic;
+  }
+
+  .card .id{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--rule);
+    margin-top: 6px;
+  }
+
+  .card-actions{
+    display:flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .card-actions button{
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .empty{
+    padding: 40px 0;
+    text-align:center;
+    color: var(--ink-soft);
+    font-style: italic;
+  }
+
+  .editing{
+    background: var(--paper-dark);
+    outline: 1px dashed var(--red-soft);
+    outline-offset: 4px;
+  }
+
+  footer{
+    margin-top: 60px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-soft);
+    text-align:center;
+  }
+
+  @media (max-width: 560px){
+    h1{ font-size: 32px; }
+    .row{ flex-direction: column; align-items: stretch; }
+    .row .field.note{ flex: 1; }
+    .card{ grid-template-columns: 1fr; }
+    .card-actions{ flex-direction: row; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="kicker">EDIÇÃO PESSOAL &mdash; ATUALIZADO EM TEMPO REAL</p>
+    <h1>Caderno de <em>Resenhas</em></h1>
+    <p class="sub">Um registro simples de tudo que você assistiu, leu ou provou — com uma nota e algumas linhas sobre o porquê.</p>
+  </header>
+
+  <section class="entry">
+    <h2 id="form-title">NOVA RESENHA</h2>
+    <input type="hidden" id="editId" value="">
+    <div class="field">
+      <label for="fname">Título</label>
+      <input type="text" id="fname" placeholder="Ex: Cidade de Deus">
+    </div>
+    <div class="field">
+      <label for="fdesc">Resenha</label>
+      <textarea id="fdesc" placeholder="O que achou?"></textarea>
+    </div>
+    <div class="row">
+      <div class="field note">
+        <label for="fnote">Nota</label>
+        <input type="number" id="fnote" step="0.1" min="0" placeholder="0–10">
+      </div>
+      <div class="actions-row" style="flex:1;">
+        <button type="button" class="ghost" id="cancelBtn" style="display:none;">Cancelar</button>
+        <button type="button" id="saveBtn">Salvar resenha</button>
+      </div>
+    </div>
+    <p class="status" id="status"></p>
+  </section>
+
+  <div class="list-head">
+    <h2>ARQUIVO</h2>
+    <div style="display:flex; align-items:baseline; gap:14px;">
+      <span id="count"></span>
+      <button type="button" class="ghost" id="resetBtn" style="padding:4px 10px; font-size:11px;">Zerar tudo</button>
+    </div>
+  </div>
+  <div id="list"></div>
+
+  <footer>conectado a http://localhost:3000/resenhas</footer>
+</div>
+
+<script>
+const API = 'http://localhost:3000/resenhas';
+
+const els = {
+  name: document.getElementById('fname'),
+  desc: document.getElementById('fdesc'),
+  note: document.getElementById('fnote'),
+  editId: document.getElementById('editId'),
+  formTitle: document.getElementById('form-title'),
+  saveBtn: document.getElementById('saveBtn'),
+  cancelBtn: document.getElementById('cancelBtn'),
+  status: document.getElementById('status'),
+  list: document.getElementById('list'),
+  count: document.getElementById('count'),
+};
+
+function setStatus(msg, type){
+  els.status.textContent = msg || '';
+  els.status.className = 'status' + (type ? ' ' + type : '');
+}
+
+function escapeHtml(str){
+  return String(str ?? '').replace(/[&<>"']/g, c => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+  }[c]));
+}
+
+async function loadReviews(){
+  setStatus('Carregando...');
+  try{
+    const res = await fetch(API);
+    if(!res.ok) throw new Error('Falha ao carregar (' + res.status + ')');
+    const data = await res.json();
+    renderList(data);
+    setStatus('');
+  }catch(err){
+    els.list.innerHTML = '';
+    setStatus('Não foi possível conectar à API em ' + API + '. Verifique se o servidor está rodando.', 'err');
+    els.count.textContent = '';
+  }
+}
+
+let currentItems = [];
+
+function renderList(items){
+  currentItems = items;
+  els.count.textContent = items.length + (items.length === 1 ? ' item' : ' itens');
+
+  if(!items.length){
+    els.list.innerHTML = '<p class="empty">Nenhuma resenha ainda. Escreva a primeira acima.</p>';
+    return;
+  }
+
+  els.list.innerHTML = items.map(item => `
+    <div class="card" data-id="${item.id}">
+      <div>
+        <div class="meta">
+          <span class="name">${escapeHtml(item.name)}</span>
+          <span class="note">${escapeHtml(item.note)}</span>
+        </div>
+        <p class="describe">${escapeHtml(item.describe)}</p>
+        <p class="id">#${item.id}</p>
+      </div>
+      <div class="card-actions">
+        <button type="button" class="ghost" data-action="edit" data-id="${item.id}">Editar</button>
+        <button type="button" class="ghost" data-action="delete" data-id="${item.id}">Excluir</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+els.list.addEventListener('click', (ev) => {
+  const btn = ev.target.closest('button[data-action]');
+  if(!btn) return;
+  const id = Number(btn.dataset.id);
+  const item = currentItems.find(i => i.id === id);
+  if(!item) return;
+
+  if(btn.dataset.action === 'edit'){
+    startEdit(item.id, item.name, item.describe, item.note);
+  } else if(btn.dataset.action === 'delete'){
+    removeReview(item.id);
+  }
+});
+
+function startEdit(id, name, describe, note){
+  els.editId.value = id;
+  els.name.value = name;
+  els.desc.value = describe;
+  els.note.value = note;
+  els.formTitle.textContent = 'EDITANDO RESENHA #' + id;
+  els.saveBtn.textContent = 'Atualizar resenha';
+  els.cancelBtn.style.display = 'inline-block';
+  document.querySelector('.entry').classList.add('editing');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function resetForm(){
+  els.editId.value = '';
+  els.name.value = '';
+  els.desc.value = '';
+  els.note.value = '';
+  els.formTitle.textContent = 'NOVA RESENHA';
+  els.saveBtn.textContent = 'Salvar resenha';
+  els.cancelBtn.style.display = 'none';
+  document.querySelector('.entry').classList.remove('editing');
+}
+
+els.cancelBtn.addEventListener('click', () => { resetForm(); setStatus(''); });
+
+els.saveBtn.addEventListener('click', async () => {
+  const name = els.name.value.trim();
+  const describe = els.desc.value.trim();
+  const note = parseFloat(els.note.value);
+  const id = els.editId.value;
+
+  if(!name){ setStatus('Título é obrigatório.', 'err'); return; }
+  if(isNaN(note) || note < 0){ setStatus('Informe uma nota válida (0 ou mais).', 'err'); return; }
+
+  const payload = { name, describe, note };
+  setStatus(id ? 'Atualizando...' : 'Salvando...');
+
+  try{
+    const url = id ? `${API}/${id}` : API;
+    const method = id ? 'PATCH' : 'POST';
+    const res = await fetch(url, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if(!res.ok){
+      const errBody = await res.json().catch(() => ({}));
+      throw new Error(errBody.mensagem || errBody || 'Erro ao salvar');
+    }
+
+    setStatus(id ? 'Resenha atualizada.' : 'Resenha criada.', 'ok');
+    resetForm();
+    loadReviews();
+  }catch(err){
+    setStatus(typeof err.message === 'string' ? err.message : 'Erro ao salvar a resenha.', 'err');
+  }
+});
+
+async function removeReview(id){
+  if(!confirm('Excluir esta resenha?')) return;
+  setStatus('Excluindo...');
+  try{
+    const res = await fetch(`${API}/${id}`, { method: 'DELETE' });
+    if(!res.ok){
+      const errBody = await res.json().catch(() => ({}));
+      throw new Error(errBody.mensagem || 'Erro ao excluir');
+    }
+    setStatus('Resenha excluída.', 'ok');
+    loadReviews();
+  }catch(err){
+    setStatus(err.message, 'err');
+  }
+}
+
+document.getElementById('resetBtn').addEventListener('click', async () => {
+  if(!confirm('Isso vai apagar TODAS as resenhas e zerar os IDs. Tem certeza?')) return;
+  setStatus('Zerando...');
+  try{
+    const res = await fetch(`${API}/reset`, { method: 'DELETE' });
+    if(!res.ok) throw new Error('Erro ao zerar as resenhas');
+    const data = await res.json();
+    setStatus(data.mensagem || 'Resenhas zeradas.', 'ok');
+    resetForm();
+    loadReviews();
+  }catch(err){
+    setStatus(err.message, 'err');
+  }
+});
+
+loadReviews();
+</script>
+</body>
+</html>
