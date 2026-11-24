@@ -8,9 +8,10 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "API REST simples para cadastrar, listar, editar e excluir resenhas (filmes, livros, o que quiser), com uma interface web em HTML/CSS/JS puro para consumi-la.",
   "dependencies": {
     "cors": "^2.8.6",
     "express": "^5.2.1"
-  }
+  },
+  "devDependencies": {}
 }

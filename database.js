@@ -5,6 +5,7 @@ dataBase.exec(`
 
     CREATE TABLE IF NOT EXISTS list (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
+  type TEXT,
   name TEXT,
   describe TEXT,
   note INTEGER
