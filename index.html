@@ -278,11 +278,15 @@
   </header>
 
   <section class="entry">
-    <h2 id="form-title">NOVA RESENHA</h2>
+    <h2 id="form-title">CRIAR NOVA RESENHA</h2>
     <input type="hidden" id="editId" value="">
     <div class="field">
       <label for="fname">Título</label>
       <input type="text" id="fname" placeholder="Ex: Cidade de Deus">
+    </div>
+    <div class="field">
+      <label for="ftype">Tipo</label>
+      <input type="text" id="ftype" placeholder="Ex: Série, filme, anime, desenho...">
     </div>
     <div class="field">
       <label for="fdesc">Resenha</label>
@@ -318,6 +322,7 @@ const API = 'http://localhost:3000/resenhas';
 
 const els = {
   name: document.getElementById('fname'),
+  type: document.getElementById('ftype'),
   desc: document.getElementById('fdesc'),
   note: document.getElementById('fnote'),
   editId: document.getElementById('editId'),
@@ -371,6 +376,7 @@ function renderList(items){
       <div>
         <div class="meta">
           <span class="name">${escapeHtml(item.name)}</span>
+          <span class="name">${escapeHtml(item.type)}</span>
           <span class="note">${escapeHtml(item.note)}</span>
         </div>
         <p class="describe">${escapeHtml(item.describe)}</p>
@@ -392,15 +398,16 @@ els.list.addEventListener('click', (ev) => {
   if(!item) return;
 
   if(btn.dataset.action === 'edit'){
-    startEdit(item.id, item.name, item.describe, item.note);
+    startEdit(item.id, item.name, item.type, item.describe, item.note);
   } else if(btn.dataset.action === 'delete'){
     removeReview(item.id);
   }
 });
 
-function startEdit(id, name, describe, note){
+function startEdit(id, name, type, describe, note){
   els.editId.value = id;
   els.name.value = name;
+  els.type.value = type;
   els.desc.value = describe;
   els.note.value = note;
   els.formTitle.textContent = 'EDITANDO RESENHA #' + id;
@@ -413,6 +420,7 @@ function startEdit(id, name, describe, note){
 function resetForm(){
   els.editId.value = '';
   els.name.value = '';
+  els.type.value = '';
   els.desc.value = '';
   els.note.value = '';
   els.formTitle.textContent = 'NOVA RESENHA';
@@ -425,6 +433,7 @@ els.cancelBtn.addEventListener('click', () => { resetForm(); setStatus(''); });
 
 els.saveBtn.addEventListener('click', async () => {
   const name = els.name.value.trim();
+  const type = els.type.value.trim();
   const describe = els.desc.value.trim();
   const note = parseFloat(els.note.value);
   const id = els.editId.value;
@@ -432,7 +441,7 @@ els.saveBtn.addEventListener('click', async () => {
   if(!name){ setStatus('Título é obrigatório.', 'err'); return; }
   if(isNaN(note) || note < 0){ setStatus('Informe uma nota válida (0 ou mais).', 'err'); return; }
 
-  const payload = { name, describe, note };
+  let payload = { name, type, describe, note };
   setStatus(id ? 'Atualizando...' : 'Salvando...');
 
   try{

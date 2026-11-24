@@ -1,3 +1,4 @@
+    
     const database = require('./database')
     const express = require('express');
     const app = express();
@@ -24,11 +25,13 @@
         const newReview = req.body
         if(typeof(newReview.name) == "string" &&
                 newReview.name.trim().length>0 &&
+                newReview.type.trim().length>0 &&
+                typeof(newReview.type) == "string" &&
                 typeof(newReview.describe) == "string" &&
                 newReview.describe.trim().length>=0 &&
                 typeof(newReview.note) == "number" &&
                 newReview.note >=0){
-                    database.prepare('INSERT INTO list (name, describe, note) VALUES (?, ?, ?)').run(newReview.name, newReview.describe, newReview.note)
+                    database.prepare('INSERT INTO list (name, type, describe, note) VALUES (?, ?, ?, ?)').run(newReview.name, newReview.type , newReview.describe, newReview.note)
                     res.status(201).json({
                             mensagem: "resenha criada!", 
                         })
@@ -44,12 +47,14 @@
         const reviewFound = database.prepare('SELECT * FROM list WHERE id = ?').get(reviewId)
         if(reviewFound && typeof(reviewBody.name) == "string" &&
                 reviewBody.name.trim().length>0 &&
+                reviewBody.type.trim().length>0 &&
+                typeof(reviewBody.type) == "string" &&
                 typeof(reviewBody.describe) == "string" &&
                 reviewBody.describe.trim().length>=0 &&
                 typeof(reviewBody.note) == "number" &&
                 reviewBody.note >=0){
                     const updatedReview = ({...reviewFound, ...req.body})
-                    database.prepare('UPDATE list SET name = ?, describe = ?, note = ? WHERE id = ?').run(updatedReview.name, updatedReview.describe, updatedReview.note, reviewId)
+                    database.prepare('UPDATE list SET name = ?, type = ?, describe = ?, note = ? WHERE id = ?').run(updatedReview.name, updatedReview.type ,updatedReview.describe, updatedReview.note, reviewId)
                     res.json({mensagem: "Resenha atualizada!"})
                 }else{
                     res.status(404).json({mensagem: "resenha não encontrada OU parâmetros inválidos"})
